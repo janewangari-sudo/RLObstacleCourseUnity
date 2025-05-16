@@ -201,16 +201,16 @@ MonoBehaviour:
     VectorObservationSize: 1
     NumStackedVectorObservations: 1
     m_ActionSpec:
-      m_NumContinuousActions: 0
+      m_NumContinuousActions: 2
       BranchSizes: 01000000
-    VectorActionSize: 01000000
+    VectorActionSize: 
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: My Behavior
+  m_BehaviorName: AgentSphereBehavior
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -609,6 +609,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_West
       objectReference: {fileID: 0}
+    - target: {fileID: 4442214966094889101, guid: a54c1b63a830d0c4c8bf6c54a9fcdd7b, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     - target: {fileID: 7647018042406499036, guid: a54c1b63a830d0c4c8bf6c54a9fcdd7b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -25
@@ -706,6 +710,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_North
       objectReference: {fileID: 0}
+    - target: {fileID: 8749976190982838493, guid: 4570d941841f2204fae49ad9c6bab8db, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -722,6 +730,10 @@ PrefabInstance:
     - target: {fileID: 7315376007054490408, guid: 19a673840cb929c4d86ec25e5ed18a3c, type: 3}
       propertyPath: m_Name
       value: Wall_South
+      objectReference: {fileID: 0}
+    - target: {fileID: 7315376007054490408, guid: 19a673840cb929c4d86ec25e5ed18a3c, type: 3}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     - target: {fileID: 7383871867019700316, guid: 19a673840cb929c4d86ec25e5ed18a3c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -970,6 +982,10 @@ PrefabInstance:
     - target: {fileID: 1508106466800830793, guid: 758445f0146e8e64c9e421a78b192d73, type: 3}
       propertyPath: m_Name
       value: Wall_East
+      objectReference: {fileID: 0}
+    - target: {fileID: 1508106466800830793, guid: 758445f0146e8e64c9e421a78b192d73, type: 3}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     - target: {fileID: 3302449146454012140, guid: 758445f0146e8e64c9e421a78b192d73, type: 3}
       propertyPath: m_LocalPosition.x
