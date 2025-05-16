@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -185,6 +185,7 @@ MonoBehaviour:
   MaxStep: 0
   targetTransform: {fileID: 0}
   moveForce: 10
+  distanceRewardMultiplier: 0.01
 --- !u!114 &4139044137524298017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +226,6 @@ MonoBehaviour:
     m_Bits: 4294967241
   m_ObservationStacks: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
-  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  rayMissColor: {r: 0.8490566, g: 0.70719737, b: 0.09211465, a: 1}
   m_StartVerticalOffset: 0.1
   m_EndVerticalOffset: 0.2
