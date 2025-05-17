@@ -1,0 +1,29 @@
+{
+    "AgentSphereBehavior": {
+        "checkpoints": [
+            {
+                "steps": 62975,
+                "file_path": "results\\ProximityRewardTest\\AgentSphereBehavior\\AgentSphereBehavior-62975.onnx",
+                "reward": -3.950111985206604,
+                "creation_time": 1747426789.6660333,
+                "auxillary_file_paths": [
+                    "results\\ProximityRewardTest\\AgentSphereBehavior\\AgentSphereBehavior-62975.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 62975,
+            "file_path": "results\\ProximityRewardTest\\AgentSphereBehavior.onnx",
+            "reward": -3.950111985206604,
+            "creation_time": 1747426789.6660333,
+            "auxillary_file_paths": [
+                "results\\ProximityRewardTest\\AgentSphereBehavior\\AgentSphereBehavior-62975.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
