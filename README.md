@@ -98,21 +98,7 @@ The `AgentSphereAgent` is a sphere with a `Rigidbody` component, learning throug
 ## 🧪 Hyperparameter Experiments & Training (Guideline #10)
 
 Several training experiments were conducted to find an optimal configuration. The agent was trained on the full dynamic environment. Key configurations and their outcomes are summarized below:
-
-### 🧪 Hyperparameter Experiments & Key Learnings (Guideline #10)
-
-A series of experiments were conducted to optimize the `AgentSphereBehavior`. The following table highlights key configurations tested on the full dynamic environment (moving target, random moving pillar, and procedural static obstacles), using the final agent script (Target Reward: +5.0, Obstacle Collision: -0.1 non-terminal, `moveForce`: `[YourTunedValue, e.g., 6f]`, etc.) unless otherwise noted in "Key Differences & Notes".
-
-| Run Name (TensorBoard Label)                                  | Color | Hidden Units (Policy) | Batch Size | Learning Rate (Policy) | Curiosity Strength (YAML) | Beta (YAML) | Result (Peak/Stable Mean Reward) | Key Differences & Notes                                                                                                |
-| :------------------------------------------------------------ | :---: | :-------------------- | :--------- | :--------------------- | :------------------------ | :---------- | :----------------------------- | :--------------------------------------------------------------------------------------------------------------------- |
-| 🟠 `Exp_With_CuriosityAgentSphereBehavior`                    |  🟠   | 128 (2 layers)        | 128        | 0.0001                 | 0.05                      | 0.02        | **~ +1.8 ⭐ Best** | **Champion Run.** Achieved high positive rewards with excellent stability and efficiency. Showcased strong learning. |
-| 🔵 `Exp_With_No_CuriosityAgentSphereBehavior`                 |  🔵   | 128 (2 layers)        | 128        | 0.0001                 | **None** | 0.02        | ~ -0.2                         | Compared to Champion, removing curiosity significantly reduced performance. Curiosity appears vital.            |
-| 🩷 `Exp_With_Curiosity_EndEpisodeOnHittingObstacleAgentSphereBehavior` |  🩷   | 128 (2 layers)        | 128        | 0.0001                 | 0.05                      | 0.02        | `[e.g., ~ -0.7]`               | Obstacle collision was terminal (`EndEpisode()`) & likely a harsher penalty (e.g., -1.0). Performed worse than champion. |
-| 💚 `[Your Run ID for earlier -1.1 Plateau, e.g., Exp_Curiosity_s0.02]` |  💚   | 128 (2 layers)        | 128        | 0.0001                 | 0.02 (Lower than champ)   | 0.02        | ~ -1.1                         | Very stable, but plateaued. Increasing curiosity strength to 0.05 (as in champion) was beneficial.    |
-| ⚪️ `[Example: Exp1_Net256 - if you ran a comparable version]` |  ⚪️   | `256 (2 layers)`      | `128`      | `0.0001`               | `0.05`                    | `0.02`      | `[Your Result]`                | `[e.g., Did not improve over 128HU, or slower convergence]`                                             |
-
-*This table demonstrates the iterative tuning process. The combination of a +5.0 target reward, non-terminal soft obstacle penalties (-0.1), specific `beta` (0.02) and `curiosity strength` (0.05) values, a low `learning_rate` (0.0001), and a `128x2` network proved to be the most effective configuration for this complex task.*
-### Best Performing Configuration: `Config_With_Curiosity2.yaml` 
+---
 
 The configuration that produced the best results (Mean Reward consistently **~+1.377** or your highest achieved stable positive value) is detailed in the `Config_With_Curiosity2.yaml` file and the final version of the `AgentSphere.cs` script (as provided in the repository). The critical factors for success included:
 * A significantly attractive **Target Reward of +1.2f**.
@@ -125,6 +111,15 @@ The configuration that produced the best results (Mean Reward consistently **~+1
 * A **tuned `moveForce`** (`5f`) in the Unity Inspector for the `AgentSphereAgent` for precise control.
 
 ---
+
+### Training Run Summary
+| Color   | Experiment Name                                           | Curiosity | Learning Rate | Hidden Units | Batch Size | Beta | Final Result (Reward) | Observation                                                            |
+| ------- | --------------------------------------------------------- | --------- | ------------- | ------------ | ---------- | ---- | --------------------- | ---------------------------------------------------------------------- |
+| 🔴 Red  | `Exp_NoCuriosity\AgentSphereBehavior`                     | ❌ No      | 3e-4          | 128          | 1024       | –    | \~1.88                | Very stable, converged to high reward quickly.                         |
+| 🔵 Blue | `Exp_With_Curiosity\AgentSphereBehavior`                  | ✅ Yes     | 3e-4          | 128          | 1024       | 0.2  | \~1.76                | Steady improvement, good final reward, moderate episode length.        |
+| 🟣 Pink | `Exp_With_Curiosity_Endepisode\AgentSphereBehavior`       | ✅ Yes     | 3e-4          | 128          | 1024       | 0.2  | \~-0.25               | Fluctuations in early stage, eventually stabilizes at moderate reward. |
+| ⚪ Gray  | `Exp_With_No_Curiosity_Endepisode\AgentSphereBehavior`    | ❌ No      | 3e-4          | 128          | 1024       | –    | \~-0.25               | Plateaued at negative reward, slow learning progress.                  |
+| 🟢 Teal | `Exp_withEndepisodeonHittingObstacle\AgentSphereBehavior` | ❌ No      | 3e-4          | 128          | 1024       | –    | \~0.55                | Good learning, short episodes, consistent positive reward.             |
 
 ## 📊 TensorBoard Visualizations (Guideline #8)
 
@@ -153,14 +148,38 @@ The following TensorBoard screenshots illustrate the learning progress of the ch
 > Replace `YOUTUBE_VIDEO_ID` with your actual YouTube video ID.
 
 ---
-## 🚀 How to Set Up and Run
+## 🚀 Getting Started
 
-### a. Prerequisites
-* Unity Hub & Unity Editor `2022.3.62f1`
-* Anaconda/Miniconda (Python `3.9`)
-* Git
+1.  **Clone the Repository**
+    ```bash
+    git clone [https://github.com/YOUR_USERNAME/RLObstacleCourseUnity.git](https://github.com/YOUR_USERNAME/RLObstacleCourseUnity.git)
+    cd RLObstacleCourseUnity
+    ```
 
-### b. Clone Repository
-```bash
-git clone [https://github.com/janewangari-sudo/RLObstacleCourseUnity.git](https://github.com/janewangari-sudo/RLObstacleCourseUnity.git)
-cd RLObstacleCourseUnity
+2.  **Set Up ML-Agents**
+    ```bash
+    pip install mlagents
+    ```
+
+3.  **Train the Agent**
+    ```bash
+    mlagents-learn config/config_fast.yaml --run-id=fast_run --train
+    ```
+
+4.  **Monitor Training**
+    ```bash
+    tensorboard --logdir=results
+    ```
+
+5.  **Deploy in Unity**
+    * Drag your trained `.nn` model into the Unity Editor.
+    * Assign it to the Agent’s `Behavior Parameters` component.
+
+## Credits
+
+Created by Jane Gathongo
+
+GitHub: [@janewangari-sudo](https://github.com/janewangari-sudo)
+
+Project repo: [RLObstacleCourseUnity](https://github.com/janewangari-sudo/RLObstacleCourseUnity)
+
