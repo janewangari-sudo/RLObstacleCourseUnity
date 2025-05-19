@@ -8,45 +8,52 @@ public class AgentSphereAgent : Agent
 {
     [Header("Agent Settings")]
     public Transform targetTransform;
-    public float moveForce = 10f;
+    public float moveForce = 10f; // You had tuned this to 5f, remember to set it in Inspector!
 
     [Header("Reward Shaping Settings")]
     public float distanceRewardMultiplier = 0.01f;
+    // Add this with your other public variables, e.g., under [Header("Reward Shaping Settings")]
+    public float wrongDirectionPenalty = -0.02f; // Penalty amount (should be negative)
+    public float wrongDirectionThreshold = -0.5f; // Dot product threshold (e.g., -0.5 means moving more than 120 degrees away from target)
 
     [Header("Procedural Obstacle Settings")]
-    public GameObject obstacleToSpawnPrefab; // Assign your "SpawnableObstacle_Static" prefab
+    public GameObject obstacleToSpawnPrefab;
     public int minObstaclesToSpawn = 2;
     public int maxObstaclesToSpawn = 4;
-    public Transform obstaclesParentTransform; // Optional: An empty GameObject to keep spawned obstacles organized
+    public Transform obstaclesParentTransform; // Optional
+
+    [Header("Fixed Obstacles References")] // To avoid spawning procedural obstacles on these
+    public List<Transform> fixedObstaclesList; // Assign your Obstacle1,2,3 and MovingPillar1 here
 
     [Header("Spawning Area Bounds")]
     public float spawnAreaMinX = -15f;
     public float spawnAreaMaxX = 15f;
     public float spawnAreaMinZ = -15f;
     public float spawnAreaMaxZ = 15f;
-    public float obstacleSpawnY = 0.5f; // Y position for spawned obstacles (base on floor)
-    public float minSpawnDistFromAgentStart = 3f; // Don't spawn too close to agent's fixed start
-    // public float minSpawnDistFromTargetStart = 3f; // Less critical if target moves when reached
-    public float minDistBetweenSpawnedObstacles = 2.0f; // Min distance between newly spawned obstacles
+    public float obstacleSpawnY = 0.75f; // Corrected value from our previous discussion
+    public float minSpawnDistFromAgentStart = 3f;
+    public float minSpawnDistFromFixedObstacles = 3.0f; // Tune this distance as needed
+    public float minDistBetweenSpawnedObstacles = 2.0f;
 
     private Rigidbody rb;
     private Vector3 startingPosition;
     private float previousDistanceToTarget;
-    private List<GameObject> spawnedObstacleList = new List<GameObject>(); // To keep track of spawned obstacles
+    private List<GameObject> spawnedObstacleList = new List<GameObject>();
 
     public override void Initialize()
     {
         rb = GetComponent<Rigidbody>();
-        startingPosition = transform.localPosition; // Agent always starts here
+        startingPosition = transform.localPosition;
 
         if (rb == null) Debug.LogError("Rigidbody component not found on AgentSphereAgent!", this);
         if (targetTransform == null) Debug.LogError("Target Transform has not been assigned for AgentSphereAgent!", this);
         if (obstacleToSpawnPrefab == null) Debug.LogWarning("ObstacleToSpawnPrefab not assigned. No procedural obstacles will be spawned.", this);
+        if (fixedObstaclesList == null || fixedObstaclesList.Count == 0) Debug.LogWarning("FixedObstaclesList is not assigned or is empty. Procedural obstacles might spawn on top of fixed ones.", this);
     }
 
     public override void OnEpisodeBegin()
     {
-        // --- Reset Agent ---
+        // Reset Agent
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
@@ -54,14 +61,14 @@ public class AgentSphereAgent : Agent
         }
         transform.localPosition = startingPosition;
 
-        // --- Clear Previously Spawned Obstacles ---
+        // Clear Previously Spawned Obstacles
         foreach (GameObject obs in spawnedObstacleList)
         {
             Destroy(obs);
         }
         spawnedObstacleList.Clear();
 
-        // --- Spawn New Random Obstacles ---
+        // Spawn New Random Obstacles
         if (obstacleToSpawnPrefab != null)
         {
             int numberOfObstacles = Random.Range(minObstaclesToSpawn, maxObstaclesToSpawn + 1);
@@ -88,9 +95,9 @@ public class AgentSphereAgent : Agent
                     // Check against other newly spawned obstacles in this episode
                     if (!overlap)
                     {
-                        foreach (GameObject existingObs in spawnedObstacleList)
+                        foreach (GameObject existingSpawnedObs in spawnedObstacleList)
                         {
-                            if (Vector3.Distance(potentialPosition, existingObs.transform.localPosition) < minDistBetweenSpawnedObstacles)
+                            if (Vector3.Distance(potentialPosition, existingSpawnedObs.transform.localPosition) < minDistBetweenSpawnedObstacles)
                             {
                                 overlap = true;
                                 break;
@@ -98,10 +105,27 @@ public class AgentSphereAgent : Agent
                         }
                     }
 
+                    // --- NEW CHECK: Against manually placed fixed/moving obstacles ---
+                    if (!overlap && fixedObstaclesList != null)
+                    {
+                        foreach (Transform fixedObsTransform in fixedObstaclesList)
+                        {
+                            if (fixedObsTransform != null) // Check if the slot in the list is filled
+                            {
+                                if (Vector3.Distance(potentialPosition, fixedObsTransform.position) < minSpawnDistFromFixedObstacles)
+                                {
+                                    overlap = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // --- END OF NEW CHECK ---
+
                     if (!overlap)
                     {
                         GameObject newObstacle = Instantiate(obstacleToSpawnPrefab, potentialPosition, Quaternion.identity);
-                        if (obstaclesParentTransform != null) // Organize in hierarchy if a parent is assigned
+                        if (obstaclesParentTransform != null)
                         {
                             newObstacle.transform.SetParent(obstaclesParentTransform);
                         }
@@ -113,9 +137,7 @@ public class AgentSphereAgent : Agent
             }
         }
 
-        // --- Initialize/Reset previousDistanceToTarget ---
-        // This should be done *after* the agent is at its start and the target is in its initial position for the episode.
-        // Since your target moves when reached (not at episode start typically), its position here is its last known position.
+        // Initialize/Reset previousDistanceToTarget
         if (targetTransform != null)
         {
             previousDistanceToTarget = Vector3.Distance(transform.localPosition, targetTransform.localPosition);
@@ -128,7 +150,7 @@ public class AgentSphereAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        if (targetTransform == null) return;
+        if (targetTransform == null || rb == null) return;
 
         sensor.AddObservation(rb.velocity.x);
         sensor.AddObservation(rb.velocity.z);
@@ -140,31 +162,67 @@ public class AgentSphereAgent : Agent
     }
 
     public override void OnActionReceived(ActionBuffers actions)
+{
+    float moveX = actions.ContinuousActions[0];
+    float moveZ = actions.ContinuousActions[1];
+
+    Vector3 intendedMoveDirection = Vector3.zero; // To store the direction the agent intends to move
+
+    if (rb != null)
     {
-        float moveX = actions.ContinuousActions[0];
-        float moveZ = actions.ContinuousActions[1];
-
-        if (rb != null)
-        {
-            Vector3 force = new Vector3(moveX, 0f, moveZ) * moveForce;
-            rb.AddForce(force);
-        }
-
-        if (targetTransform != null)
-        {
-            float currentDistanceToTarget = Vector3.Distance(transform.localPosition, targetTransform.localPosition);
-            float distanceDelta = previousDistanceToTarget - currentDistanceToTarget;
-
-            if (distanceDelta > 0)
-            {
-                AddReward(distanceDelta * distanceRewardMultiplier);
-            }
-            // Optional penalty for moving away could be added here
-            previousDistanceToTarget = currentDistanceToTarget;
-        }
-
-        AddReward(-0.001f); // Per-step penalty
+        intendedMoveDirection = new Vector3(moveX, 0f, moveZ); // This is the direction vector from actions
+        Vector3 forceToApply = intendedMoveDirection.normalized * moveForce; // Normalize for consistent force magnitude if moveForce is main speed control
+                                                                         // If you want varying force based on action magnitude, use:
+                                                                         // Vector3 forceToApply = intendedMoveDirection * moveForce; 
+                                                                         // (The version we had before)
+                                                                         // For this penalty, using the normalized intendedMoveDirection is good.
+        rb.AddForce(forceToApply);
     }
+
+    if (targetTransform != null)
+    {
+        // --- Proximity Reward (Getting closer to target) ---
+        float currentDistanceToTarget = Vector3.Distance(transform.localPosition, targetTransform.localPosition);
+        float distanceDelta = previousDistanceToTarget - currentDistanceToTarget; // Positive if we got closer
+
+        if (distanceDelta > 0) // We moved closer
+        {
+            AddReward(distanceDelta * distanceRewardMultiplier);
+        }
+        // Optional: Penalty for moving further away (could be added here too)
+        // else if (distanceDelta < -0.01f) // Moved significantly further (example threshold)
+        // {
+        //     AddReward(distanceDelta * someOtherPenaltyMultiplier); // distanceDelta is negative
+        // }
+        previousDistanceToTarget = currentDistanceToTarget; // Update for the next step
+
+        // --- NEW: Penalty for moving significantly opposite to the target ---
+        if (intendedMoveDirection.sqrMagnitude > 0.01f) // Only penalize if there's actual intended movement
+        {
+            Vector3 directionToTargetActual = (targetTransform.localPosition - transform.localPosition).normalized;
+            float alignment = Vector3.Dot(intendedMoveDirection.normalized, directionToTargetActual);
+
+            // If alignment is less than threshold (e.g., -0.5), agent is moving >120 degrees away from target
+            if (alignment < wrongDirectionThreshold)
+            {
+                AddReward(wrongDirectionPenalty); // Add the negative reward
+                // You could also print a debug message here when testing to see when it triggers
+                // Debug.Log($"Wrong direction penalty applied! Alignment: {alignment}");
+            }
+        }
+        // --- END OF NEW PENALTY ---
+    }
+
+    // Existing small negative reward per step (to encourage efficiency)
+    AddReward(-0.001f);
+
+    // Optional: Fell off platform check
+    if (transform.localPosition.y < -1f) // Adjust -1f to be below your floor
+    {
+        AddReward(-0.001f); // Add a penalty if you like
+        EndEpisode();
+    }
+}
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -175,12 +233,10 @@ public class AgentSphereAgent : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        // Remember: Your manually placed static obstacles and your MovingPillar1 should also be tagged "Obstacle".
-        // The procedurally spawned ones from obstacleToSpawnPrefab will also need the "Obstacle" tag on the prefab itself.
         if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Wall"))
         {
-            AddReward(-1.0f);
-            EndEpisode();
+            AddReward(-0.1f); //was -0.1
+            EndEpisode();     //commented out
         }
     }
 
@@ -188,10 +244,7 @@ public class AgentSphereAgent : Agent
     {
         if (other.gameObject.CompareTag("Target"))
         {
-            AddReward(1.0f);
-            // Target already moves due to TargetMovement.cs script attached to the target object itself,
-            // which is called from this agent script when it was not procedural.
-            // Let's ensure the target moves. If TargetMovement.cs is on the target, this is one way:
+            AddReward(2.0f); //was 5.0f
             TargetMovement targetScript = other.gameObject.GetComponent<TargetMovement>();
             if (targetScript != null)
             {

@@ -1,0 +1,29 @@
+{
+    "AgentSphereBehavior": {
+        "checkpoints": [
+            {
+                "steps": 5699,
+                "file_path": "results\\Exp1_Net256Exp2_LR1e-4.yaml\\AgentSphereBehavior\\AgentSphereBehavior-5699.onnx",
+                "reward": -3.1323850949605307,
+                "creation_time": 1747462766.4895866,
+                "auxillary_file_paths": [
+                    "results\\Exp1_Net256Exp2_LR1e-4.yaml\\AgentSphereBehavior\\AgentSphereBehavior-5699.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5699,
+            "file_path": "results\\Exp1_Net256Exp2_LR1e-4.yaml\\AgentSphereBehavior.onnx",
+            "reward": -3.1323850949605307,
+            "creation_time": 1747462766.4895866,
+            "auxillary_file_paths": [
+                "results\\Exp1_Net256Exp2_LR1e-4.yaml\\AgentSphereBehavior\\AgentSphereBehavior-5699.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

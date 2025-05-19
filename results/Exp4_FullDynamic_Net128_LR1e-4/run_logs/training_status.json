@@ -1,0 +1,29 @@
+{
+    "AgentSphereBehavior": {
+        "checkpoints": [
+            {
+                "steps": 51962,
+                "file_path": "results\\Exp4_FullDynamic_Net128_LR1e-4\\AgentSphereBehavior\\AgentSphereBehavior-51962.onnx",
+                "reward": -1.2872018665075302,
+                "creation_time": 1747474068.2353866,
+                "auxillary_file_paths": [
+                    "results\\Exp4_FullDynamic_Net128_LR1e-4\\AgentSphereBehavior\\AgentSphereBehavior-51962.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 51962,
+            "file_path": "results\\Exp4_FullDynamic_Net128_LR1e-4\\AgentSphereBehavior.onnx",
+            "reward": -1.2872018665075302,
+            "creation_time": 1747474068.2353866,
+            "auxillary_file_paths": [
+                "results\\Exp4_FullDynamic_Net128_LR1e-4\\AgentSphereBehavior\\AgentSphereBehavior-51962.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

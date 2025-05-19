@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1747492050",
+        "python_version": "3.9.21 (main, Dec 11 2024, 16:35:24) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\JANE\\anaconda3\\envs\\mlagents_env\\Scripts\\mlagents-learn RLObstacleCourse/Assets/ML-Agents-Configs/Exp_FullDynamic_WithCuriosity.yaml --run-id=Exp2_Curiosity_s0.02 --force",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1+cu110",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1747492114"
+    },
+    "total": 64.24977750000001,
+    "count": 1,
+    "self": 0.09012380000000064,
+    "children": {
+        "run_training.setup": {
+            "total": 0.36023600000000044,
+            "count": 1,
+            "self": 0.36023600000000044
+        },
+        "TrainerController.start_learning": {
+            "total": 63.79941770000001,
+            "count": 1,
+            "self": 0.0004876000000137992,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 63.79881809999999,
+                    "count": 1,
+                    "self": 63.79881809999999
+                },
+                "TrainerController._save_models": {
+                    "total": 0.00011200000000144428,
+                    "count": 1,
+                    "self": 0.00011200000000144428
+                }
+            }
+        }
+    }
+}

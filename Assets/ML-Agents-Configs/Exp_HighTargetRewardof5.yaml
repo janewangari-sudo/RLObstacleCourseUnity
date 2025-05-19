@@ -1,0 +1,32 @@
+behaviors:
+  AgentSphereBehavior: 
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 128
+      buffer_size: 2048
+      learning_rate: 0.0001 # Was 0.0003
+      beta: 0.02          #  Was 0.005
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: false
+      hidden_units: 128     # Wass 512 units 
+      num_layers: 2
+      vis_encode_type: simple # Default for non-visual observations
+    reward_signals:
+      extrinsic: # This is your main reward from the C# script (target, collision, proximity, step penalty)
+        gamma: 0.99
+        strength: 1.0
+      curiosity: # 
+        gamma: 0.99         # Discount factor for the curiosity reward
+        strength: 0.05      # How much this curiosity reward contributes. It is a key Parameter Tune. 
+        network_settings:   
+          hidden_units: 256 # Size of the curiosity network's hidden layers (as in Pyramids example)
+          # num_layers: 2 (default for curiosity network if not specified, often 2)
+        learning_rate: 0.0003 # Specific learning rate for the curiosity module's network (as in Pyramids example)
+    keep_checkpoints: 5
+    max_steps: 1000000       # Or 500000, a substantial run to see the effect
+    time_horizon: 64
+    summary_freq: 10000     # Or adjust as needed for how often you want logs
