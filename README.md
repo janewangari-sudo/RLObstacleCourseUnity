@@ -1,84 +1,41 @@
-# 🧠 RL Obstacle Course Navigator – AgentSphere (Unity ML-Agents)
+#  RL Obstacle Course Navigator – AgentSphere (Unity ML-Agents)
 
-**AgentSphere** is a reinforcement learning agent trained with Unity ML-Agents to navigate a dynamic 3D obstacle course and reach a moving target. Built as part of a reinforcement learning course, this project showcases curriculum-style training, procedural environments, and robust agent perception using raycasts and vector observations.
-
-📁 **Repo:** [janewangari-sudo/RLObstacleCourseUnity](https://github.com/janewangari-sudo/RLObstacleCourseUnity)  
-👩‍💻 **Author:** [Jane Gathongo](https://github.com/janewangari-sudo)
+**AgentSphere** is a reinforcement learning agent built with Unity ML-Agents to navigate a dynamic 3D obstacle course and reach a moving target. This project demonstrates curriculum-style training, procedural environments, and robust agent perception using raycasts and vector observations.
 
 ---
 
-## 🎮 Overview
+##  Overview
 
-- **Agent**: A white sphere (`AgentSphere`)
-- **Goal**: Reach the green target (`TargetSphere`)
-- **Environment**:  
-  - Procedural static and dynamic obstacles  
-  - Moving sinusoidal pillar  
-  - Target repositions randomly per success
-- **Reward Highlights**:
-  - ✅ +1.2 for reaching target  
-  - ❌ -0.4 for obstacle/wall collision  
-  - 💀 -1.0 for falling off  
-  - ⏱️ Per-step and directional penalties/rewards
+- **Agent**: White sphere (`AgentSphere`)
+- **Goal**: Reach the green `TargetSphere`
+- **Environment**: Procedural layout with static/dynamic obstacles, including sinusoidal movement and randomized target positioning
+- **Reward System**:
+  - +1.2 for reaching the target
+  - -0.4 for hitting obstacles/walls
+  - -1.0 for falling off
+  - Step-wise shaping penalties and rewards
 
 ---
 
-## 🔑 Features
+##  Features
 
-- **3D Procedural Arena** with varying layouts per episode
-- **Agent Perception**  
-  - `RayPerceptionSensor3D` (9 rays, 120° FoV, 35 units)  
-  - 5D vector observations (velocity, target direction, distance)
-- **Continuous Control**: 2D force-based movement (X/Z axes)
-- **Dynamic Elements**:
-  - Sinusoidal obstacle movement (X/Z axis)
-  - Randomized spawns for target and obstacles
-- **Parallel Training** for faster convergence
-- **TensorBoard Monitoring**
-- **Extensive Hyperparameter Tuning**
+- Procedural 3D obstacle courses
+- Ray-based perception (`RayPerceptionSensor3D`) and vector observations (5D)
+- Continuous 2D control using force on X/Z axes
+- Randomized spawns and sinusoidal obstacles
+- Parallel training for efficiency
+- Visualized progress via TensorBoard
+- Tuned with various training configurations
 
 ---
 
-## 🛠️ Setup & Training
+##  Setup & Training
 
 ### Requirements
 - Unity `2022.3.6f1`
 - Python `3.9`
 - `ml-agents==0.30.0`
 - PyTorch `1.7.1+cpu`
-
-
-
-
----
-
-### Training Run Summary
-| Color   | Experiment Name                                           | Curiosity | Learning Rate | Hidden Units | Batch Size | Beta | Final Result (Reward) | Observation                                                            |
-| ------- | --------------------------------------------------------- | --------- | ------------- | ------------ | ---------- | ---- | --------------------- | ---------------------------------------------------------------------- |
-| 🔴 Red  | `Exp_NoCuriosity\AgentSphereBehavior`                     | ❌ No      | 3e-4          | 128          | 1024       | –    | \~1.88                | Very stable, converged to high reward quickly.                         |
-| 🔵 Blue | `Exp_With_Curiosity\AgentSphereBehavior`                  | ✅ Yes     | 3e-4          | 128          | 1024       | 0.2  | \~1.76                | Steady improvement, good final reward, moderate episode length.        |
-| 🟣 Pink | `Exp_With_Curiosity_Endepisode\AgentSphereBehavior`       | ✅ Yes     | 3e-4          | 128          | 1024       | 0.2  | \~-0.25               | Fluctuations in early stage, eventually stabilizes at moderate reward. |
-| ⚪ Gray  | `Exp_With_No_Curiosity_Endepisode\AgentSphereBehavior`    | ❌ No      | 3e-4          | 128          | 1024       | –    | \~-0.25               | Plateaued at negative reward, slow learning progress.                  |
-| 🟢 Teal | `Exp_withEndepisodeonHittingObstacle\AgentSphereBehavior` | ❌ No      | 3e-4          | 128          | 1024       | –    | \~0.55                | Good learning, short episodes, consistent positive reward.             |
-
-## 📊 TensorBoard Visualizations (Guideline #8)
-
-The following TensorBoard screenshots illustrate the learning progress of the champion experimental run.
-
-### Champion Training Run: `[YourChampionRunID, e.g., Exp_LongRays_FinalPush]`
-*(This graph should clearly show the Mean Cumulative Reward climbing to your best positive value, and the Episode Length decreasing and stabilizing.)*
-
-**[EMBED YOUR BEST TENSORBOARD SCREENSHOT HERE - The one showing the +4.377 (or better) curve for Cumulative Reward and Episode Length. Ensure this image is in your GitHub repo, e.g., in a `docs/images/` folder.]**
-*Markdown Example: `![Champion Run: Cumulative Reward & Episode Length](docs/images/ChampionRun_TensorBoard.png)`*
-
----
-## 📷 Screenshots
-
-> Upload images to your repo in an `/assets/` folder and update the links below.
-
-| Agent Navigating | Training Graphs | Arena Setup |
-|------------------|-----------------|-------------|
-| ![Gameplay](assets/agent-running.gif) | ![Rewards](assets/tensorboard-rewards.png) | ![Arena](assets/arena-layout.png) |
 
 ---
 ## 📺 Watch the Demo
@@ -88,7 +45,7 @@ The following TensorBoard screenshots illustrate the learning progress of the ch
 > Replace `YOUTUBE_VIDEO_ID` with your actual YouTube video ID.
 
 ---
-## 🚀 Getting Started
+##  Getting Started
 
 1.  **Clone the Repository**
     ```bash
