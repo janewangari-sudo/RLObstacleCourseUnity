@@ -10,8 +10,8 @@
 - **Goal**: Reach the green `TargetSphere`
 - **Environment**: Procedural layout with static/dynamic obstacles, including sinusoidal movement and randomized target positioning
 - **Reward System**:
-  - +1.2 for reaching the target
-  - -0.4 for hitting obstacles/walls
+  - +1.0 for reaching the target
+  - -0.1 for hitting obstacles/walls
   - -1.0 for falling off
   - Step-wise shaping penalties and rewards
 
