@@ -42,7 +42,6 @@
 
 [![Watch the demo](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/0.jpg)](https://youtu.be/YOUTUBE_VIDEO_ID)
 
-> Replace `YOUTUBE_VIDEO_ID` with your actual YouTube video ID.
 
 ---
 ##  Getting Started
